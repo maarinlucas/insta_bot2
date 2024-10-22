@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaBot - Programar Postagem</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #262626;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="file"],
+        input[type="datetime-local"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #dbdbdb;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #3897f0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3183cc;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            input[type="submit"] {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bem-vindo ao InstaBot!</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="files">Escolha a Imagem/Reel/Vídeo:</label>
+            <input type="file" id="files" name="files" accept="image/*" multiple required>
+
+            <label for="caption">Texto da Postagem:</label>
+            <textarea id="caption" name="caption" rows="4" required></textarea>
+
+            <label for="hashtags">Hashtags (separadas por vírgula):</label>
+            <input type="text" id="hashtags" name="hashtags">
+
+            <div class="form-actions">
+                <div>
+                    <input type="checkbox" id="immediate_post" name="immediate_post" value="true">
+                    <label for="immediate_post">Postar Imediatamente</label>
+                </div>
+               
+            </div>
+
+            <label for="post_time">Agendar para:</label>
+            <input type="datetime-local" id="post_time" name="post_time">
+
+            <div class="form-actions">
+                <div>
+                    <input type="checkbox" id="disable_likes" name="disable_likes" value="true">
+                    <label for="disable_likes">Desativar Curtidas</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="disable_comments" name="disable_comments" value="true">
+                    <label for="disable_comments">Desativar Comentários</label>
+                </div>
+            </div>
+
+            <input type="submit" value="Programar Postagem">
+        </form>
+    </div>
+</body>
+</html>
