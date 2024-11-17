@@ -1,0 +1,8 @@
+cd C:\Users\lucas\OneDrive\Área de Trabalho\automacoes\postagem
+
+venv\Scripts\activate
+
+python app.py
+
+
+
