@@ -75,8 +75,8 @@ def index():
 
 
 
-cvexpress_user = os.getenv('CVEXPRESS_USER')
-cvexpress_pass = os.getenv('CVEXPRESS_PASS')
+empreendedor_user = os.getenv('EMPREENDEDOR_USER')
+empreendedor_pass = os.getenv('EMPREENDEDOR_PASS')
 
 maarinlucas_user = os.getenv('MAARINLUCAS_USER')
 maarinlucas_pass = os.getenv('MAARINLUCAS_PASS')
@@ -89,16 +89,18 @@ def upload():
     conta = request.form['conta']
     
     
-    if conta == 'cvexpress':
-        username = cvexpress_user
-        password = cvexpress_pass
-        print('Postando em Cv Express...')
+    if conta == 'empreendedor':
+        username = empreendedor_user
+        password = empreendedor_pass
+        print('Postando em Empreendedor do futuro...')
     elif conta == 'maarinlucas':
         username = maarinlucas_user
         password = maarinlucas_pass
+        print('Postando na conta pessoal...')
     elif conta == 'agenciaroyalx':
         username = agenciaroyalx_user
         password = agenciaroyalx_pass
+        print('Postando em Royal X...')
     else:
         username = ''
         password = ''
