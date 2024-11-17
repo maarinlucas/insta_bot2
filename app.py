@@ -6,21 +6,28 @@ import time
 import threading
 from datetime import datetime
 from dotenv import load_dotenv
-import logging 
+import logging
 
 load_dotenv()
+
+# Configuração do logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')  # Chave secreta da aplicação
 
+# Função para postar a mídia
 def post_media(username, password, media_type, file_paths, caption, hashtags, disable_comments, disable_likes):
     cl = Client()
-      
     
-        
-    cl.login(username, password)
+    try:
+        # Login no Instagram
+        cl.login(username, password)
+    except Exception as e:
+        logging.error(f"Erro de login: {e}")
+        return flash(f"Erro de login: {e}", "error")
 
-    # Formata as hashtags
+    # Formatação das hashtags
     if hashtags:
         caption += '\n'.join(['.'] * 15) + '\n' + ' '.join([f'#{tag.strip()}' for tag in hashtags.split(',')])
 
@@ -34,36 +41,36 @@ def post_media(username, password, media_type, file_paths, caption, hashtags, di
                     'disable_likes': disable_likes
                 }
             )
-            print("Foto postada com sucesso!")
+            logging.info("Foto postada com sucesso!")
         elif media_type == 'video' and len(file_paths) == 1:
             cl.video_upload(file_paths[0], caption,
-                extra_data={
-                    'disable_comments': disable_comments,
-                    'disable_likes': disable_likes
-                })
-            print("Reel postado com sucesso!")
+                            extra_data={
+                                'disable_comments': disable_comments,
+                                'disable_likes': disable_likes
+                            })
+            logging.info("Reel postado com sucesso!")
         elif media_type == 'storie_photo' and len(file_paths) == 1:
             cl.photo_upload_to_story(file_paths[0])
-            
-            print("Storie postado com sucesso!") 
+            logging.info("Storie postado com sucesso!")
         elif media_type == 'storie_video' and len(file_paths) == 1:
             cl.video_upload_to_story(file_paths[0])
-               
-            print("Storie postado com sucesso!")                
+            logging.info("Storie postado com sucesso!")
         elif media_type == 'carousel':
             cl.album_upload(file_paths, caption)
-            print("Carrossel postado com sucesso!")
+            logging.info("Carrossel postado com sucesso!")
         else:
             flash("Tipo de mídia inválido ou número incorreto de arquivos.", "error")
     except Exception as e:
-        print(f"Erro ao postar: {e}")
-        logging.info("Foto postada com sucesso!")
+        logging.error(f"Erro ao postar: {e}")
+        flash(f"Erro ao postar: {e}", "error")
 
+# Função para agendar o post
 def schedule_post(username, password, media_type, file_paths, caption, hashtags, disable_comments, disable_likes, post_time):
     schedule.every().day.at(post_time.strftime("%H:%M")).do(
         post_media, username, password, media_type, file_paths, caption, hashtags, disable_comments, disable_likes
     )
 
+# Thread para rodar o scheduler
 def scheduler_thread():
     while True:
         schedule.run_pending()
@@ -73,8 +80,7 @@ def scheduler_thread():
 def index():
     return render_template('index.html')
 
-
-
+# Variáveis de ambiente para as contas de Instagram
 empreendedor_user = os.getenv('EMPREENDEDOR_USER')
 empreendedor_pass = os.getenv('EMPREENDEDOR_PASS')
 
@@ -88,26 +94,24 @@ agenciaroyalx_pass = os.getenv('AGENCIAROYALX_PASS')
 def upload():
     conta = request.form['conta']
     
-    
+    # Verifica qual conta foi selecionada e atribui as credenciais
     if conta == 'empreendedor':
         username = empreendedor_user
         password = empreendedor_pass
-        print('Postando em Empreendedor do futuro...')
+        logging.info('Postando em Empreendedor do futuro...')
     elif conta == 'maarinlucas':
         username = maarinlucas_user
         password = maarinlucas_pass
-        print('Postando na conta pessoal...')
+        logging.info('Postando na conta pessoal...')
     elif conta == 'agenciaroyalx':
         username = agenciaroyalx_user
         password = agenciaroyalx_pass
-        print('Postando em Royal X...')
+        logging.info('Postando em Royal X...')
     else:
-        username = ''
-        password = ''
-        print('Escolha uma conta para comtinuar...')
-           
-        
-    
+        flash('Escolha uma conta para continuar...', 'error')
+        return redirect('/')
+
+    # Obtém dados do formulário
     media_type = request.form['media_type']
     caption = request.form['caption']
     hashtags = request.form['hashtags']
@@ -128,10 +132,15 @@ def upload():
         file.save(file_path)
         file_paths.append(file_path)
 
+    # Verifica se o post é imediato ou agendado
     if immediate_post:
         post_media(username, password, media_type, file_paths, caption, hashtags, disable_comments, disable_likes)
     else:
-        post_datetime = datetime.strptime(post_time, '%Y-%m-%dT%H:%M')
+        try:
+            post_datetime = datetime.strptime(post_time, '%Y-%m-%dT%H:%M')
+        except ValueError:
+            flash("Formato de horário inválido. Use o formato YYYY-MM-DDTHH:MM.", "error")
+            return redirect('/')
         schedule_post(username, password, media_type, file_paths, caption, hashtags, disable_comments, disable_likes, post_datetime)
 
     return redirect('/')
