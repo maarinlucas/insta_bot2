@@ -1,0 +1,8 @@
+cd C:\Users\lucas\Desktop\projetos\instabot2
+
+venv\Scripts\activate
+
+python app.py
+
+
+

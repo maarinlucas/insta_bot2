@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Post Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align:center">Agendador de Postagens Instagram</h2>
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <label for="conta">Conta:</label>
+    <select id="conta" name="conta" required>   
+        <option value="empreendedor.do.futuro">Empreendedor Do Futuro</option>    
+        <option value="maarinlucas">Pessoal</option>
+        <option value="agenciaroyalx">Royal X</option>      
+    </select>
+
+    <!-- <label for="username">Usuário:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Senha:</label>
+    <input type="password" id="password" name="password" required> -->
+
+    <label for="media_type">Tipo de Mídia:</label>
+    <select id="media_type" name="media_type" required>
+        <option value="photo">Foto</option>
+        <option value="video">Video</option>
+        <option value="carousel">Carrossel</option>
+        <option value="storie_photo">Storie Foto</option>
+        <option value="storie_video">Storie Video</option>
+    </select>
+
+    <label for="files">Arquivos:</label>
+    <input type="file" id="files" name="files" multiple required>
+
+    <label for="caption">Legenda:</label>
+    <textarea id="caption" name="caption" rows="3"></textarea>
+
+    <label for="hashtags">Hashtags (separadas por vírgula):</label>
+    <input type="text" id="hashtags" name="hashtags">
+
+    <input type="checkbox" id="disable_comments" name="disable_comments">
+    <label for="disable_comments">Desativar Comentários</label><br>
+
+    <input type="checkbox" id="disable_likes" name="disable_likes">
+    <label for="disable_likes">Desativar Curtidas</label><br>
+
+    <input type="checkbox" id="immediate_post" name="immediate_post">
+    <label for="immediate_post">Postar Imediatamente</label><br>
+
+    <label for="post_time">Agendar para (YYYY-MM-DDTHH:MM):</label>
+    <input type="datetime-local" id="post_time" name="post_time">
+
+    <button type="submit">Agendar/Enviar</button>
+</form>
+
+</body>
+</html>
